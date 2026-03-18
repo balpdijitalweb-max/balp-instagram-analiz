@@ -7,27 +7,21 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.10.3/Recharts.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-<style>
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
-.animate-spin{animation:spin 1s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-</style>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%234F46E5'/><text x='16' y='22' text-anchor='middle' fill='white' font-size='18' font-weight='bold'>B</text></svg>">
+<style>body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}.animate-spin{animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}</style>
 </head>
 <body>
 <div id="root"></div>
 <script type="text/babel">
 const {useState,useCallback}=React;
-const {PieChart,Pie,Cell,BarChart,Bar,XAxis,YAxis,CartesianGrid,Tooltip,Legend,ResponsiveContainer}=Recharts;
-
+const e=React.createElement;
 const C={blue:"#3B82F6",green:"#10B981",orange:"#F59E0B",red:"#EF4444",purple:"#8B5CF6",pink:"#EC4899",cyan:"#06B6D4",slate:"#64748B"};
 const PAGE=40;
-const BRAND="Balp Instagram Analiz";
 
 const maleNames=new Set(["ahmet","mehmet","mustafa","ali","hasan","huseyin","ibrahim","ismail","osman","murat","omer","yusuf","mahmut","halil","suleyman","abdullah","ramazan","recep","kadir","yasin","emre","burak","serkan","fatih","kemal","cem","can","berk","tolga","sinan","selim","oguz","volkan","baris","tuna","arda","kaan","onur","furkan","umut","eren","enes","baran","alp","taha","ilker","caner","ugur","gokhan","erkan","okan","adem","salih","bilal","sedat","mesut","ferhat","cengiz","yilmaz","metin","bayram","bekir","ilhan","cemil","hikmet","turan","celal","hamza","emin","sefa","erdem","mert","koray","serdar","yigit","batuhan","berkay","eray","doruk","atakan","tayfun","bulent","necati","orhan","nihat","samet","taner","zafer","vedat","remzi","sahin","bahadir","alican","polat","deniz"]);
 const femaleNames=new Set(["ayse","fatma","emine","hatice","zeynep","elif","merve","busra","esra","derya","seda","gamze","gul","gulsen","havva","hanife","hulya","leyla","mine","muge","nur","nuray","ozlem","pinar","rabia","sevgi","sibel","sultan","serife","tulay","yasemin","zehra","zuleyha","asli","basak","burcu","ceren","dilara","ebru","eda","gizem","hilal","irmak","kubra","melike","naz","neslihan","nihal","oya","ozge","pelin","selin","simge","seyma","tugba","yagmur","beril","cansu","damla","duygu","irem","lale","nisa","ruya","senem","sinem","sude","melis","buse","beyza","ada","azra","defne","ecrin","nehir","nurgul","sevda","songul","aylin","fulya","ilknur","serpil","dilek","filiz","nurcan","selma","aynur","hacer","cemile","fadime","nermin","serap"]);
-const bizWords=["dijital","ajans","agency","media","medya","shop","store","market","emlak","mobilya","furniture","home","design","tasarim","reklam","danisma","hukuk","avukat","doktor","dr.","klinik","cafe","restaurant","hotel","otel","turizm","insaat","gayrimenkul","sigorta","nakliyat","matbaa","foto","video","yazilim","software","teknoloji","tech","web","seo","kurumsal","holding","tic","ltd","org","vakf","dernek","spor","kulub","muhendis","mimari","elektrik","enerji","gida","tarim","tekstil","moda","butik","kozmetik","guzellik","kuafor","oto","pet","eczane","optik","cicek","pastane","firin","lokanta","kitap","muzik","sanat","galeri","atolye","studio","akademi","egitim","kurs"];
+const bizWords=["dijital","ajans","agency","media","medya","shop","store","market","emlak","mobilya","furniture","home","design","tasarim","reklam","danisma","hukuk","avukat","doktor","dr.","klinik","cafe","restaurant","hotel","otel","turizm","insaat","gayrimenkul","sigorta","nakliyat","yazilim","software","teknoloji","tech","web","seo","kurumsal","holding","tic","ltd","org","vakf","dernek","spor","muhendis","mimari","elektrik","enerji","gida","tekstil","moda","butik","kozmetik","guzellik","kuafor","oto","pet","eczane","cicek","pastane","firin","lokanta","muzik","sanat","galeri","atolye","studio","akademi","egitim","kurs"];
 
 function classify(n,u){const nm=(n||"").toLowerCase().replace(/[^a-z\u00e7\u011f\u0131\u00f6\u015f\u00fc ]/g," ").trim();const un=(u||"").toLowerCase();if(bizWords.some(w=>(nm+" "+un).includes(w)))return"business";const f=nm.split(/\s+/)[0];if(maleNames.has(f))return"male";if(femaleNames.has(f))return"female";return"unknown"}
 
@@ -49,17 +43,60 @@ function analyzeData(j){
   return{totalFollowers:fr.length,totalFollowing:fg.length,mutual:mutual.length,fmnfbCount:fmnfb.length,ifnfmCount:ifnfm.length,fmnfbList:fmnfb,ifnfmList:ifnfm,mutualList:mutual,gender:g}
 }
 
-function BalpLogo({size}){
-  const s=size==="lg"?"width:64px;height:64px;font-size:24px":"width:40px;height:40px;font-size:14px";
-  return React.createElement("div",{style:{...{borderRadius:12,background:"linear-gradient(135deg,#4F46E5,#7C3AED)",display:"flex",alignItems:"center",justifyContent:"center",fontWeight:"bold",color:"#fff",boxShadow:"0 4px 12px rgba(79,70,229,0.3)",...Object.fromEntries(s.split(";").filter(Boolean).map(p=>p.split(":").map(v=>v.trim())).map(([k,v])=>[k.replace(/-([a-z])/g,(_,c)=>c.toUpperCase()),v]))}}},"B")
+/* Donut Chart - Pure SVG */
+function DonutChart({data,size=220}){
+  const total=data.reduce((s,d)=>s+d.value,0);
+  const cx=size/2,cy=size/2,r=size*0.35,rInner=size*0.22;
+  let startAngle=-90;
+  const paths=data.filter(d=>d.value>0).map((d,i)=>{
+    const angle=(d.value/total)*360;
+    const endAngle=startAngle+angle;
+    const largeArc=angle>180?1:0;
+    const s1=startAngle*Math.PI/180,e1=endAngle*Math.PI/180;
+    const path=`M${cx+r*Math.cos(s1)} ${cy+r*Math.sin(s1)} A${r} ${r} 0 ${largeArc} 1 ${cx+r*Math.cos(e1)} ${cy+r*Math.sin(e1)} L${cx+rInner*Math.cos(e1)} ${cy+rInner*Math.sin(e1)} A${rInner} ${rInner} 0 ${largeArc} 0 ${cx+rInner*Math.cos(s1)} ${cy+rInner*Math.sin(s1)} Z`;
+    const midAngle=(startAngle+angle/2)*Math.PI/180;
+    const labelR=(r+rInner)/2;
+    const pct=((d.value/total)*100).toFixed(0);
+    startAngle=endAngle;
+    return e("g",{key:i},
+      e("path",{d:path,fill:d.color,style:{cursor:"default"}}),
+      angle>15&&e("text",{x:cx+labelR*Math.cos(midAngle),y:cy+labelR*Math.sin(midAngle),textAnchor:"middle",dominantBaseline:"central",fill:"#fff",fontSize:11,fontWeight:"bold"},pct+"%")
+    );
+  });
+  return e("div",{className:"flex flex-col items-center"},
+    e("svg",{width:size,height:size,viewBox:`0 0 ${size} ${size}`},paths),
+    e("div",{className:"flex flex-wrap justify-center gap-3 mt-3"},
+      data.filter(d=>d.value>0).map((d,i)=>e("div",{key:i,className:"flex items-center gap-1.5 text-xs text-gray-600"},
+        e("div",{style:{width:10,height:10,borderRadius:3,background:d.color}}),
+        e("span",null,d.name)
+      ))
+    )
+  )
+}
+
+/* Bar Chart - Pure SVG */
+function HBarChart({data,width=400,height=200}){
+  const max=Math.max(...data.map(d=>d.count));
+  const barH=Math.min(30,height/(data.length*1.5));
+  const leftPad=65;
+  return e("svg",{width:"100%",viewBox:`0 0 ${width} ${height}`,style:{maxWidth:width}},
+    data.map((d,i)=>{
+      const y=20+i*(barH+12);const w=max>0?((d.count/max)*(width-leftPad-20)):0;
+      return e("g",{key:i},
+        e("text",{x:leftPad-8,y:y+barH/2,textAnchor:"end",dominantBaseline:"central",fontSize:11,fill:"#666"},d.name),
+        e("rect",{x:leftPad,y,width:w,height:barH,rx:4,fill:d.fill}),
+        e("text",{x:leftPad+w+6,y:y+barH/2,dominantBaseline:"central",fontSize:11,fill:"#666"},d.count.toLocaleString("tr-TR"))
+      )
+    })
+  )
 }
 
 function StatCard({title,value,subtitle,color,icon}){
-  return React.createElement("div",{className:"bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex flex-col gap-1 hover:shadow-md transition-shadow"},
-    React.createElement("span",{className:"text-2xl"},icon),
-    React.createElement("div",{className:"text-2xl font-bold",style:{color}},typeof value==="number"?value.toLocaleString("tr-TR"):value),
-    React.createElement("div",{className:"text-xs font-semibold text-gray-700"},title),
-    subtitle&&React.createElement("div",{className:"text-xs text-gray-400"},subtitle)
+  return e("div",{className:"bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex flex-col gap-1 hover:shadow-md transition-shadow"},
+    e("span",{className:"text-2xl"},icon),
+    e("div",{className:"text-2xl font-bold",style:{color}},typeof value==="number"?value.toLocaleString("tr-TR"):value),
+    e("div",{className:"text-xs font-semibold text-gray-700"},title),
+    subtitle&&e("div",{className:"text-xs text-gray-400"},subtitle)
   )
 }
 
@@ -67,82 +104,79 @@ function UserList({title,users,color,icon}){
   const[q,setQ]=useState("");const[pg,setPg]=useState(1);
   const f=q?users.filter(u=>u.toLowerCase().includes(q.toLowerCase())):users;
   const tp=Math.ceil(f.length/PAGE);const sl=f.slice((pg-1)*PAGE,pg*PAGE);
-  return React.createElement("div",{className:"bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"},
-    React.createElement("div",{className:"p-3 border-b",style:{background:color+"0D"}},
-      React.createElement("div",{className:"flex items-center justify-between flex-wrap gap-2"},
-        React.createElement("div",{className:"flex items-center gap-2"},
-          React.createElement("span",{className:"text-xl"},icon),
-          React.createElement("div",null,
-            React.createElement("h3",{className:"text-sm font-bold",style:{color}},title),
-            React.createElement("p",{className:"text-xs text-gray-400"},f.length.toLocaleString("tr-TR")+" kisi")
-          )
+  return e("div",{className:"bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"},
+    e("div",{className:"p-3 border-b",style:{background:color+"0D"}},
+      e("div",{className:"flex items-center justify-between flex-wrap gap-2"},
+        e("div",{className:"flex items-center gap-2"},
+          e("span",{className:"text-xl"},icon),
+          e("div",null,e("h3",{className:"text-sm font-bold",style:{color}},title),e("p",{className:"text-xs text-gray-400"},f.length.toLocaleString("tr-TR")+" kisi"))
         ),
-        React.createElement("input",{type:"text",placeholder:"Ara...",value:q,onChange:e=>{setQ(e.target.value);setPg(1)},className:"px-2 py-1 text-xs border border-gray-200 rounded-lg w-40 focus:outline-none focus:ring-2 focus:ring-indigo-200"})
+        e("input",{type:"text",placeholder:"Ara...",value:q,onChange:ev=>{setQ(ev.target.value);setPg(1)},className:"px-2 py-1 text-xs border border-gray-200 rounded-lg w-40 focus:outline-none"})
       )
     ),
-    React.createElement("div",{style:{maxHeight:320,overflowY:"auto"}},
-      sl.map((u,i)=>React.createElement("div",{key:u,className:"flex items-center justify-between px-3 py-1.5 text-xs "+(i%2?"bg-gray-50":"")},
-        React.createElement("span",{className:"text-gray-400 w-8"},(pg-1)*PAGE+i+1),
-        React.createElement("span",{className:"flex-1 font-medium text-gray-700"},"@"+u),
-        React.createElement("a",{href:"https://instagram.com/"+u,target:"_blank",rel:"noopener noreferrer",className:"px-2 py-0.5 rounded text-white text-xs",style:{background:color}},"Git")
+    e("div",{style:{maxHeight:320,overflowY:"auto"}},
+      sl.map((u,i)=>e("div",{key:u,className:"flex items-center justify-between px-3 py-1.5 text-xs "+(i%2?"bg-gray-50":"")},
+        e("span",{className:"text-gray-400 w-8"},(pg-1)*PAGE+i+1),
+        e("span",{className:"flex-1 font-medium text-gray-700"},"@"+u),
+        e("a",{href:"https://instagram.com/"+u,target:"_blank",rel:"noopener noreferrer",className:"px-2 py-0.5 rounded text-white text-xs",style:{background:color}},"Git")
       )),
-      sl.length===0&&React.createElement("p",{className:"text-center py-6 text-xs text-gray-400"},"Sonuc bulunamadi")
+      sl.length===0&&e("p",{className:"text-center py-6 text-xs text-gray-400"},"Sonuc bulunamadi")
     ),
-    tp>1&&React.createElement("div",{className:"flex items-center justify-between px-3 py-2 border-t bg-gray-50 text-xs"},
-      React.createElement("button",{onClick:()=>setPg(Math.max(1,pg-1)),disabled:pg===1,className:"px-2 py-0.5 rounded bg-white border disabled:opacity-30 cursor-pointer"},"Onceki"),
-      React.createElement("span",{className:"text-gray-500"},pg+"/"+tp),
-      React.createElement("button",{onClick:()=>setPg(Math.min(tp,pg+1)),disabled:pg===tp,className:"px-2 py-0.5 rounded bg-white border disabled:opacity-30 cursor-pointer"},"Sonraki")
+    tp>1&&e("div",{className:"flex items-center justify-between px-3 py-2 border-t bg-gray-50 text-xs"},
+      e("button",{onClick:()=>setPg(Math.max(1,pg-1)),disabled:pg===1,className:"px-2 py-0.5 rounded bg-white border disabled:opacity-30 cursor-pointer"},"Onceki"),
+      e("span",{className:"text-gray-500"},pg+"/"+tp),
+      e("button",{onClick:()=>setPg(Math.min(tp,pg+1)),disabled:pg===tp,className:"px-2 py-0.5 rounded bg-white border disabled:opacity-30 cursor-pointer"},"Sonraki")
     )
   )
 }
 
 function UploadPage({onAnalyzed}){
   const[dragging,setDragging]=useState(false);const[loading,setLoading]=useState(false);const[err,setErr]=useState("");
-  const processFile=useCallback((file)=>{
+  const process=useCallback(file=>{
     if(!file||!file.name.endsWith(".json")){setErr("Lutfen .json dosyasi yukleyin");return}
     setLoading(true);setErr("");
     const reader=new FileReader();
-    reader.onload=(e)=>{
-      try{const json=JSON.parse(e.target.result);const result=analyzeData(json);
+    reader.onload=ev=>{
+      try{const json=JSON.parse(ev.target.result);const result=analyzeData(json);
         if(result.totalFollowing===0&&result.totalFollowers===0){setErr("Gecerli Instagram verisi bulunamadi");setLoading(false);return}
         onAnalyzed(result);
       }catch(ex){setErr("Dosya okunamadi: "+ex.message)}
       setLoading(false);
     };reader.readAsText(file);
   },[onAnalyzed]);
-  return React.createElement("div",{className:"min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50 flex items-center justify-center p-4"},
-    React.createElement("div",{className:"max-w-lg w-full"},
-      React.createElement("div",{className:"text-center mb-8"},
-        React.createElement("div",{className:"flex items-center justify-center gap-3 mb-4"},
-          React.createElement(BalpLogo,{size:"lg"})),
-        React.createElement("h1",{className:"text-3xl font-bold text-gray-800"},BRAND),
-        React.createElement("p",{className:"text-gray-500 mt-1"},"Instagram takipci analiz araci")
+  return e("div",{className:"min-h-screen flex items-center justify-center p-4",style:{background:"linear-gradient(135deg,#EEF2FF,#E0E7FF)"}},
+    e("div",{className:"max-w-lg w-full"},
+      e("div",{className:"text-center mb-8"},
+        e("div",{style:{width:64,height:64,borderRadius:16,background:"linear-gradient(135deg,#4F46E5,#7C3AED)",display:"inline-flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:28,fontWeight:"bold",boxShadow:"0 8px 24px rgba(79,70,229,0.3)"}},"B"),
+        e("h1",{className:"text-3xl font-bold text-gray-800 mt-4"},"Balp Instagram Analiz"),
+        e("p",{className:"text-gray-500 mt-1"},"Instagram takipci analiz araci")
       ),
-      React.createElement("div",{className:"bg-white rounded-3xl shadow-sm border p-8"},
-        err&&React.createElement("div",{className:"bg-red-50 text-red-600 text-sm p-3 rounded-xl mb-4"},err),
-        React.createElement("div",{
-          onDragOver:e=>{e.preventDefault();setDragging(true)},onDragLeave:()=>setDragging(false),
-          onDrop:e=>{e.preventDefault();setDragging(false);processFile(e.dataTransfer.files[0])},
+      e("div",{className:"bg-white rounded-3xl shadow-lg border p-8"},
+        err&&e("div",{className:"bg-red-50 text-red-600 text-sm p-3 rounded-xl mb-4"},err),
+        e("div",{
+          onDragOver:ev=>{ev.preventDefault();setDragging(true)},onDragLeave:()=>setDragging(false),
+          onDrop:ev=>{ev.preventDefault();setDragging(false);process(ev.dataTransfer.files[0])},
           onClick:()=>document.getElementById("fInput").click(),
-          className:"border-2 border-dashed rounded-2xl p-10 text-center transition-all cursor-pointer "+(dragging?"border-indigo-400 bg-indigo-50":"border-gray-200 hover:border-indigo-300 hover:bg-indigo-50")
+          className:"border-2 border-dashed rounded-2xl p-12 text-center transition-all cursor-pointer "+(dragging?"border-indigo-400 bg-indigo-50":"border-gray-200 hover:border-indigo-300 hover:bg-indigo-50")
         },
-          loading?React.createElement("div",null,
-            React.createElement("div",{className:"animate-spin",style:{width:40,height:40,border:"4px solid #E0E7FF",borderTop:"4px solid #4F46E5",borderRadius:"50%",margin:"0 auto"}}),
-            React.createElement("p",{className:"text-sm text-indigo-600 mt-3 font-medium"},"Analiz ediliyor...")
-          ):React.createElement("div",null,
-            React.createElement("p",{style:{fontSize:48,color:"#A5B4FC"}},"+"),
-            React.createElement("p",{className:"text-sm font-medium text-gray-600 mt-2"},"Instagram JSON dosyani surukle veya tikla"),
-            React.createElement("p",{className:"text-xs text-gray-400 mt-1"},"instagram_data.json")
+          loading?e("div",null,
+            e("div",{className:"animate-spin",style:{width:40,height:40,border:"4px solid #E0E7FF",borderTop:"4px solid #4F46E5",borderRadius:"50%",margin:"0 auto"}}),
+            e("p",{className:"text-sm text-indigo-600 mt-3 font-medium"},"Analiz ediliyor...")
+          ):e("div",null,
+            e("p",{style:{fontSize:48,color:"#A5B4FC"}},"+"),
+            e("p",{className:"text-sm font-medium text-gray-600 mt-2"},"Instagram JSON dosyani surukle veya tikla"),
+            e("p",{className:"text-xs text-gray-400 mt-1"},"instagram_data.json veya Instagram export")
           )
         ),
-        React.createElement("input",{id:"fInput",type:"file",accept:".json",style:{display:"none"},onChange:e=>processFile(e.target.files[0])}),
-        React.createElement("div",{className:"mt-6 bg-indigo-50 rounded-xl p-4"},
-          React.createElement("h3",{className:"text-sm font-bold text-indigo-700 mb-2"},"Nasil Calisir?"),
-          React.createElement("p",{className:"text-xs text-indigo-600"},"1. Instagram verini JSON formatinda indir"),
-          React.createElement("p",{className:"text-xs text-indigo-600"},"2. Dosyayi buraya yukle"),
-          React.createElement("p",{className:"text-xs text-indigo-600"},"3. Otomatik analiz ve dashboard")
+        e("input",{id:"fInput",type:"file",accept:".json",style:{display:"none"},onChange:ev=>process(ev.target.files[0])}),
+        e("div",{className:"mt-6 bg-indigo-50 rounded-xl p-4"},
+          e("h3",{className:"text-sm font-bold text-indigo-700 mb-2"},"Nasil Calisir?"),
+          e("p",{className:"text-xs text-indigo-600"},"1. Instagram verini JSON formatinda indir"),
+          e("p",{className:"text-xs text-indigo-600 mt-1"},"2. Dosyayi buraya yukle"),
+          e("p",{className:"text-xs text-indigo-600 mt-1"},"3. Otomatik analiz ve dashboard")
         )
-      )
+      ),
+      e("p",{className:"text-center text-xs text-gray-400 mt-6"},"Balp Instagram Analiz - Balp Dijital")
     )
   )
 }
@@ -150,111 +184,73 @@ function UploadPage({onAnalyzed}){
 function Dashboard({data,onNew}){
   const[tab,setTab]=useState("overview");
   const followPie=[{name:"Karsilikli Takip",value:data.mutual,color:C.green},{name:"Sadece Beni Takip Eden",value:data.fmnfbCount,color:C.orange},{name:"Sadece Ben Takip Ediyorum",value:data.ifnfmCount,color:C.red}];
-  const genderPie=[{name:"Erkek",value:data.gender.male,color:C.blue},{name:"Kadin",value:data.gender.female,color:C.pink},{name:"Firma/Marka",value:data.gender.business,color:C.purple},{name:"Tespit Edilemedi",value:data.gender.unknown,color:C.slate}];
+  const genderPie=[{name:"Erkek",value:data.gender.male,color:C.blue},{name:"Kadin",value:data.gender.female,color:C.pink},{name:"Firma/Marka",value:data.gender.business,color:C.purple},{name:"Bilinmiyor",value:data.gender.unknown,color:C.slate}];
   const genderBar=[{name:"Erkek",count:data.gender.male,fill:C.blue},{name:"Kadin",count:data.gender.female,fill:C.pink},{name:"Firma",count:data.gender.business,fill:C.purple},{name:"Diger",count:data.gender.unknown,fill:C.slate}];
   const rate=((data.mutual/Math.max(data.totalFollowing,1))*100).toFixed(1);
   const ratio=(data.totalFollowers/Math.max(data.totalFollowing,1)).toFixed(2);
-  const RADIAN=Math.PI/180;
-  const rl=({cx,cy,midAngle,innerRadius,outerRadius,percent})=>{
-    if(percent<0.04)return null;const r=innerRadius+(outerRadius-innerRadius)*0.5;
-    return React.createElement("text",{x:cx+r*Math.cos(-midAngle*RADIAN),y:cy+r*Math.sin(-midAngle*RADIAN),fill:"white",textAnchor:"middle",dominantBaseline:"central",fontSize:11,fontWeight:"bold"},(percent*100).toFixed(0)+"%")
-  };
-  const Tip=({active,payload})=>{
-    if(!active||!payload?.length)return null;
-    return React.createElement("div",{className:"bg-white px-3 py-2 shadow-lg rounded-lg border text-xs"},
-      React.createElement("p",{className:"font-semibold"},payload[0].name),
-      React.createElement("p",{style:{color:payload[0].payload.color||payload[0].color}},payload[0].value.toLocaleString("tr-TR"))
-    )
-  };
   const tabs=[{id:"overview",label:"Genel Bakis",em:"\u{1F4CA}"},{id:"lists",label:"Takip Listeleri",em:"\u{1F4CB}"},{id:"gender",label:"Cinsiyet Analizi",em:"\u{1F464}"}];
-
-  return React.createElement("div",{className:"min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50 p-4"},
-    React.createElement("div",{className:"max-w-6xl mx-auto"},
-      React.createElement("div",{className:"flex items-center justify-between mb-6"},
-        React.createElement("div",{className:"flex items-center gap-3"},React.createElement(BalpLogo,null),
-          React.createElement("div",null,React.createElement("h1",{className:"text-lg font-bold text-gray-800"},BRAND))
+  return e("div",{className:"min-h-screen p-4",style:{background:"linear-gradient(135deg,#F8FAFC,#EEF2FF)"}},
+    e("div",{className:"max-w-6xl mx-auto"},
+      e("div",{className:"flex items-center justify-between mb-6"},
+        e("div",{className:"flex items-center gap-3"},
+          e("div",{style:{width:40,height:40,borderRadius:12,background:"linear-gradient(135deg,#4F46E5,#7C3AED)",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:14,fontWeight:"bold"}},"B"),
+          e("h1",{className:"text-lg font-bold text-gray-800"},"Balp Instagram Analiz")
         ),
-        React.createElement("button",{onClick:onNew,className:"px-3 py-1.5 text-xs font-medium bg-white border rounded-lg hover:bg-gray-50 cursor-pointer"},"Yeni Analiz")
+        e("button",{onClick:onNew,className:"px-4 py-2 text-xs font-medium bg-white border rounded-lg hover:bg-gray-50 cursor-pointer shadow-sm"},"Yeni Analiz")
       ),
-      React.createElement("div",{className:"flex gap-2 mb-5 flex-wrap"},
-        tabs.map(t=>React.createElement("button",{key:t.id,onClick:()=>setTab(t.id),className:"px-4 py-2 rounded-xl text-xs font-semibold cursor-pointer transition-all "+(tab===t.id?"bg-indigo-600 text-white shadow":"bg-white text-gray-600 border hover:bg-gray-50")},t.em+" "+t.label))
+      e("div",{className:"flex gap-2 mb-5 flex-wrap"},
+        tabs.map(t=>e("button",{key:t.id,onClick:()=>setTab(t.id),className:"px-4 py-2 rounded-xl text-xs font-semibold cursor-pointer transition-all "+(tab===t.id?"bg-indigo-600 text-white shadow":"bg-white text-gray-600 border hover:bg-gray-50")},t.em+" "+t.label))
       ),
-      tab==="overview"&&React.createElement("div",{className:"space-y-5"},
-        React.createElement("div",{className:"grid grid-cols-2 md:grid-cols-4 gap-3"},
-          React.createElement(StatCard,{title:"Takipci",value:data.totalFollowers,icon:"\u{1F465}",color:C.blue,subtitle:"Seni takip edenler"}),
-          React.createElement(StatCard,{title:"Takip",value:data.totalFollowing,icon:"\u27A1\uFE0F",color:C.cyan,subtitle:"Senin takip ettiklerin"}),
-          React.createElement(StatCard,{title:"Karsilikli",value:data.mutual,icon:"\u{1F91D}",color:C.green,subtitle:"%"+rate+" oran"}),
-          React.createElement(StatCard,{title:"Oran",value:ratio,icon:"\u2696\uFE0F",color:C.purple,subtitle:"Takipci/Takip"})
+      tab==="overview"&&e("div",{className:"space-y-5"},
+        e("div",{className:"grid grid-cols-2 md:grid-cols-4 gap-3"},
+          e(StatCard,{title:"Takipci",value:data.totalFollowers,icon:"\u{1F465}",color:C.blue,subtitle:"Seni takip edenler"}),
+          e(StatCard,{title:"Takip",value:data.totalFollowing,icon:"\u27A1\uFE0F",color:C.cyan,subtitle:"Senin takip ettiklerin"}),
+          e(StatCard,{title:"Karsilikli",value:data.mutual,icon:"\u{1F91D}",color:C.green,subtitle:"%"+rate+" oran"}),
+          e(StatCard,{title:"Oran",value:ratio,icon:"\u2696\uFE0F",color:C.purple,subtitle:"Takipci/Takip"})
         ),
-        React.createElement("div",{className:"grid grid-cols-1 md:grid-cols-2 gap-3"},
-          React.createElement(StatCard,{title:"Seni Takip Eden, Sen Etmiyorsun",value:data.fmnfbCount,icon:"\u{1F44B}",color:C.orange,subtitle:"Potansiyel geri takip"}),
-          React.createElement(StatCard,{title:"Sen Takip Ediyorsun, O Etmiyor",value:data.ifnfmCount,icon:"\u{1F494}",color:C.red,subtitle:"Temizlik adayi"})
+        e("div",{className:"grid grid-cols-1 md:grid-cols-2 gap-3"},
+          e(StatCard,{title:"Seni Takip Eden, Sen Etmiyorsun",value:data.fmnfbCount,icon:"\u{1F44B}",color:C.orange,subtitle:"Potansiyel geri takip"}),
+          e(StatCard,{title:"Sen Takip Ediyorsun, O Etmiyor",value:data.ifnfmCount,icon:"\u{1F494}",color:C.red,subtitle:"Temizlik adayi"})
         ),
-        React.createElement("div",{className:"bg-white rounded-2xl p-5 shadow-sm border"},
-          React.createElement("h3",{className:"text-sm font-bold text-gray-700 mb-3"},"Takip Iliskisi Dagilimi"),
-          React.createElement(ResponsiveContainer,{width:"100%",height:280},
-            React.createElement(PieChart,null,
-              React.createElement(Pie,{data:followPie,cx:"50%",cy:"50%",outerRadius:100,innerRadius:50,dataKey:"value",labelLine:false,label:rl},
-                followPie.map((e,i)=>React.createElement(Cell,{key:i,fill:e.color}))
-              ),
-              React.createElement(Tooltip,{content:React.createElement(Tip)}),
-              React.createElement(Legend,{formatter:v=>React.createElement("span",{className:"text-xs text-gray-600"},v)})
-            )
-          )
+        e("div",{className:"bg-white rounded-2xl p-6 shadow-sm border"},
+          e("h3",{className:"text-sm font-bold text-gray-700 mb-4"},"Takip Iliskisi Dagilimi"),
+          e(DonutChart,{data:followPie,size:240})
         )
       ),
-      tab==="lists"&&React.createElement("div",{className:"grid grid-cols-1 lg:grid-cols-2 gap-5"},
-        React.createElement(UserList,{title:"Seni Takip Eden, Sen Etmiyorsun",users:data.fmnfbList,color:C.orange,icon:"\u{1F44B}"}),
-        React.createElement(UserList,{title:"Sen Takip Ediyorsun, O Etmiyor",users:data.ifnfmList,color:C.red,icon:"\u{1F494}"})
+      tab==="lists"&&e("div",{className:"grid grid-cols-1 lg:grid-cols-2 gap-5"},
+        e(UserList,{title:"Seni Takip Eden, Sen Etmiyorsun",users:data.fmnfbList,color:C.orange,icon:"\u{1F44B}"}),
+        e(UserList,{title:"Sen Takip Ediyorsun, O Etmiyor",users:data.ifnfmList,color:C.red,icon:"\u{1F494}"})
       ),
-      tab==="gender"&&React.createElement("div",{className:"space-y-5"},
-        React.createElement("div",{className:"grid grid-cols-2 md:grid-cols-4 gap-3"},
-          React.createElement(StatCard,{title:"Erkek",value:data.gender.male,icon:"\u{1F468}",color:C.blue,subtitle:"%"+((data.gender.male/Math.max(data.totalFollowing,1))*100).toFixed(1)}),
-          React.createElement(StatCard,{title:"Kadin",value:data.gender.female,icon:"\u{1F469}",color:C.pink,subtitle:"%"+((data.gender.female/Math.max(data.totalFollowing,1))*100).toFixed(1)}),
-          React.createElement(StatCard,{title:"Firma/Marka",value:data.gender.business,icon:"\u{1F3E2}",color:C.purple,subtitle:"%"+((data.gender.business/Math.max(data.totalFollowing,1))*100).toFixed(1)}),
-          React.createElement(StatCard,{title:"Bilinmiyor",value:data.gender.unknown,icon:"\u2753",color:C.slate,subtitle:"%"+((data.gender.unknown/Math.max(data.totalFollowing,1))*100).toFixed(1)})
+      tab==="gender"&&e("div",{className:"space-y-5"},
+        e("div",{className:"grid grid-cols-2 md:grid-cols-4 gap-3"},
+          e(StatCard,{title:"Erkek",value:data.gender.male,icon:"\u{1F468}",color:C.blue,subtitle:"%"+((data.gender.male/Math.max(data.totalFollowing,1))*100).toFixed(1)}),
+          e(StatCard,{title:"Kadin",value:data.gender.female,icon:"\u{1F469}",color:C.pink,subtitle:"%"+((data.gender.female/Math.max(data.totalFollowing,1))*100).toFixed(1)}),
+          e(StatCard,{title:"Firma/Marka",value:data.gender.business,icon:"\u{1F3E2}",color:C.purple,subtitle:"%"+((data.gender.business/Math.max(data.totalFollowing,1))*100).toFixed(1)}),
+          e(StatCard,{title:"Bilinmiyor",value:data.gender.unknown,icon:"\u2753",color:C.slate,subtitle:"%"+((data.gender.unknown/Math.max(data.totalFollowing,1))*100).toFixed(1)})
         ),
-        React.createElement("div",{className:"grid grid-cols-1 md:grid-cols-2 gap-5"},
-          React.createElement("div",{className:"bg-white rounded-2xl p-5 shadow-sm border"},
-            React.createElement("h3",{className:"text-sm font-bold text-gray-700 mb-3"},"Cinsiyet Dagilimi"),
-            React.createElement(ResponsiveContainer,{width:"100%",height:280},
-              React.createElement(PieChart,null,
-                React.createElement(Pie,{data:genderPie,cx:"50%",cy:"50%",outerRadius:95,innerRadius:40,dataKey:"value",labelLine:false,label:rl},
-                  genderPie.map((e,i)=>React.createElement(Cell,{key:i,fill:e.color}))
-                ),
-                React.createElement(Tooltip,{content:React.createElement(Tip)}),
-                React.createElement(Legend,{formatter:v=>React.createElement("span",{className:"text-xs text-gray-600"},v)})
-              )
-            )
+        e("div",{className:"grid grid-cols-1 md:grid-cols-2 gap-5"},
+          e("div",{className:"bg-white rounded-2xl p-6 shadow-sm border"},
+            e("h3",{className:"text-sm font-bold text-gray-700 mb-4"},"Cinsiyet Dagilimi"),
+            e(DonutChart,{data:genderPie,size:220})
           ),
-          React.createElement("div",{className:"bg-white rounded-2xl p-5 shadow-sm border"},
-            React.createElement("h3",{className:"text-sm font-bold text-gray-700 mb-3"},"Hesap Turu Dagilimi"),
-            React.createElement(ResponsiveContainer,{width:"100%",height:280},
-              React.createElement(BarChart,{data:genderBar,layout:"vertical"},
-                React.createElement(CartesianGrid,{strokeDasharray:"3 3",stroke:"#f0f0f0"}),
-                React.createElement(XAxis,{type:"number",tick:{fontSize:11}}),
-                React.createElement(YAxis,{dataKey:"name",type:"category",width:50,tick:{fontSize:11}}),
-                React.createElement(Tooltip,{formatter:v=>[v.toLocaleString("tr-TR"),"Kisi"]}),
-                React.createElement(Bar,{dataKey:"count",radius:[0,6,6,0],barSize:25},
-                  genderBar.map((e,i)=>React.createElement(Cell,{key:i,fill:e.fill}))
-                )
-              )
-            )
+          e("div",{className:"bg-white rounded-2xl p-6 shadow-sm border"},
+            e("h3",{className:"text-sm font-bold text-gray-700 mb-4"},"Hesap Turu Dagilimi"),
+            e(HBarChart,{data:genderBar})
           )
         )
       ),
-      React.createElement("div",{className:"text-center mt-8 text-xs text-gray-400"},BRAND+" - Balp Dijital")
+      e("p",{className:"text-center text-xs text-gray-400 mt-8"},"Balp Instagram Analiz - Balp Dijital")
     )
   )
 }
 
 function App(){
   const[data,setData]=useState(null);
-  if(!data)return React.createElement(UploadPage,{onAnalyzed:setData});
-  return React.createElement(Dashboard,{data,onNew:()=>setData(null)});
+  if(!data)return e(UploadPage,{onAnalyzed:setData});
+  return e(Dashboard,{data,onNew:()=>setData(null)});
 }
 
-ReactDOM.render(React.createElement(App),document.getElementById("root"));
+ReactDOM.render(e(App),document.getElementById("root"));
 </script>
 </body>
 </html>

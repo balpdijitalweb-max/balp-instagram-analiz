@@ -14,8 +14,8 @@ const SECRET = process.env.JWT_SECRET || "balp-secret-key-degistir";
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: "50mb" }));
 
-// Production'da frontend'i serve et
-app.use(express.static(path.join(__dirname, "../client/build")));
+// Frontend'i serve et (public/ klasoru)
+app.use(express.static(path.join(__dirname, "public")));
 
 // ── JWT Middleware ──
 function auth(req, res, next) {
@@ -134,7 +134,7 @@ app.get("/api/analyses/:id", auth, (req, res) => {
 
 // SPA fallback
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/build/index.html"));
+  res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
 app.listen(PORT, () => {

@@ -1,0 +1,12 @@
+{
+  "name": "balp-instagram-analiz",
+  "version": "1.0.0",
+  "description": "Balp Instagram Analiz - Full Stack",
+  "scripts": {
+    "start": "node server/index.js",
+    "postinstall": "cd server && npm install"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
